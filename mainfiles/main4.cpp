@@ -12,7 +12,9 @@
 // V 1.2.0 - Added the drop points as an array of commands and added a drop index so we can count the block/cycles without the code being too large. Also added
 //           suction commands to trial using blocks.
 //
-// V 1.3.0 - Retrieval system was now added, this code should back iterate through the positions and pick all the blocks up and returned to home. Also added a waitCmd for future code changes..
+// V 1.3.0 - Retrieval system was now added, this code should back iterate through the positions and pick all the blocks up and returned to home. Also added a waitCmd for future code changes.
+//
+// V 1.3.1 - Replaced long delays with new waitCmd so they will execute efficiently rather than us telling it when to do so.
 
 #include <Arduino.h>
 #include <Dobot.h>
@@ -82,30 +84,35 @@ void loop()
     if (currentDropIndex < NUM_DROP_POINTS) {
         // --- PICK UP PHASE ---
         dobot.commandFrame(pickupPosHoverCmd);
-        delay(2500);
+        dobot.commandFrame(waitCmd);
+        delay(100);
         
         dobot.commandFrame(pickupPosDownCmd);
-        delay(2000);
+        dobot.commandFrame(waitCmd);
+        delay(100);
         
         dobot.commandFrame(suckOnCmd);
         Serial.println("Suction ON: Block collected.");
         delay(500);
         
         dobot.commandFrame(pickupPosHoverCmd);
-        delay(2500);
+        dobot.commandFrame(waitCmd);
+        delay(100);
     
         // --- DROP OFF PHASE ---
         dobot.commandFrame(dropPositions[currentDropIndex]);
         Serial.print("Moving to Drop Position ");
         Serial.println(currentDropIndex + 1);
-        delay(2500);
+        dobot.commandFrame(waitCmd);
+        delay(100);
         
         dobot.commandFrame(suckOffCmd);
         Serial.println("Suction OFF: Block dropped.");
         delay(500);
     
         dobot.commandFrame(pickupPosHoverCmd);
-        delay(2500);
+        dobot.commandFrame(waitCmd);
+        delay(100);
     
         currentDropIndex++;
 
@@ -120,13 +127,13 @@ void loop()
 
         dobot.commandFrame(pickupPosHoverCmd); 
         dobot.commandFrame(waitCmd);
-        delay(1000);
+        delay(100);
 
         dobot.commandFrame(dropPositions[retrievalIndex]);
         Serial.print("Moving to Pick Up Position");
         Serial.println(currentDropIndex + 1);
         dobot.commandFrame(waitCmd); 
-        delay(2000); 
+        delay(100);
 
         dobot.commandFrame(suckOnCmd);
         Serial.println("Suction ON: Block collected.");
@@ -134,12 +141,12 @@ void loop()
         
         dobot.commandFrame(pickupPosHoverCmd);
         dobot.commandFrame(waitCmd);
-        delay(2000); 
+        delay(100);
         
         dobot.commandFrame(pickupPosDownCmd);
-         Serial.print("Moving to Drop Position ");
+        Serial.print("Moving to Drop Position ");
         dobot.commandFrame(waitCmd); 
-        delay(2000); 
+        delay(100);
 
         dobot.commandFrame(suckOffCmd);
         Serial.println("Suction OFF: Block dropped.");
@@ -147,7 +154,7 @@ void loop()
         
         dobot.commandFrame(pickupPosHoverCmd);
         dobot.commandFrame(waitCmd);
-        delay(2000); 
+        delay(100);
     }
 }
 
