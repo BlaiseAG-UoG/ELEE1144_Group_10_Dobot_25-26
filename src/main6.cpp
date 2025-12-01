@@ -1,5 +1,5 @@
 // MAIN.CPP FILE
-// VERSION: 1.4.0
+// VERSION: 1.5.0
 //
 // DOBOT BLOCK MOVEMENT AND COMMAND ASSIGNEMENT
 // CONTRIBUTERS - bg7890g@gre.ac.uk - rd8814j@gre.ac.uk - da1437y@gre.ac.uk
@@ -19,6 +19,8 @@
 // V 1.3.2 - Adding already supplied light sensor code as we know it works via file lightSensor.cpp. This is produced by the university.
 //
 // V 1.4.0 - Added our own colour sensing based on the results we got back from our colour test. Uses light levels to determine what colour band it is in. The applied sensor is 8mm away.
+//
+// V 1.5.0 - Added the python script used to simulate block placement based on colour. The python coordinates simulator will be added in a later version.
 
 #include <Arduino.h>
 #include <Dobot.h>
