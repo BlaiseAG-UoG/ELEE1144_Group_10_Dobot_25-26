@@ -1,5 +1,5 @@
 // MAIN.CPP FILE
-// VERSION: 1.3.0
+// VERSION: 1.3.2
 //
 // DOBOT BLOCK MOVEMENT AND COMMAND ASSIGNEMENT
 // CONTRIBUTERS - bg7890g@gre.ac.uk - rd8814j@gre.ac.uk - da1437y@gre.ac.uk
@@ -15,6 +15,8 @@
 // V 1.3.0 - Retrieval system was now added, this code should back iterate through the positions and pick all the blocks up and returned to home. Also added a waitCmd for future code changes.
 //
 // V 1.3.1 - Replaced long delays with new waitCmd so they will execute efficiently rather than us telling it when to do so.
+//
+// V 1.3.2 - Adding already supplied light sensor code as we know it works via file lightSensor.cpp. This is produced by the university.
 
 #include <Arduino.h>
 #include <Dobot.h>
