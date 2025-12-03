@@ -11,7 +11,15 @@
 //
 // V 1.2.0 - Added the drop points as an array of commands and added a drop index so we can count the block/cycles without the code being too large. Also added
 //           suction commands to trial using blocks.
-
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                               
+//                                                      THIS IS A COMPLETE WORKING VERSION OF THE CODE
+//                                                      COLOUR SORTING:                lightSensor.cpp
+//                                                      DOBOT MOVEMENTS:                     main3.cpp
+//                                                      COMPATABILITY:                            100%
+//
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <Arduino.h>
 #include <Dobot.h>
 

@@ -17,7 +17,15 @@
 // V 1.3.1 - Replaced long delays with new waitCmd so they will execute efficiently rather than us telling it when to do so.
 //
 // V 1.3.2 - Adding already supplied light sensor code as we know it works via file lightSensor.cpp. This is produced by the university.
-
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                               
+//                                                      THIS IS A THEORETICAL VERSION: LAST WORKING VERSION
+//                                                      COLOUR SORTING:                     lightSensor.cpp
+//                                                      DOBOT MOVEMENTS:                          main3.cpp
+//                                                      COMPATABILITY:                              UNKNOWN
+//
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <Arduino.h>
 #include <Dobot.h>
 

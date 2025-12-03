@@ -23,7 +23,14 @@
 # V 1.5.0 - Added the python script used to simulate block placement based on colour. The python coordinates simulator will be added in a later version.
 #
 # V 1.5.1 - Added the python coordinates verification tool, dobotCordSim.py checked the numbers match up with how the Dobot would see it.
-
+#
+####################################################################################################################################################################################################
+#                                              
+#                                                     THIS IS A COMPLETE WORKING VERSION OF THE CODE
+#                                                     DOBOT MOVEMENTS:               dobotCordSim.py
+#                                                     COMPATABILITY:                            100%
+#
+####################################################################################################################################################################################################
 import struct
 
 # --- RAW COMMANDS ---

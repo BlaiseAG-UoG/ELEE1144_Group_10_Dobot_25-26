@@ -21,7 +21,14 @@
 # V 1.4.0 - Added our own colour sensing based on the results we got back from our colour test. Uses light levels to determine what colour band it is in. The applied sensor is 8mm away.
 #
 # V 1.5.0 - Added the python script used to simulate block placement based on colour. The python coordinates simulator will be added in a later version.
-
+#
+####################################################################################################################################################################################################
+#                                              
+#                                                     THIS IS A COMPLETE WORKING VERSION OF THE CODE
+#                                                     COLOUR SORTING:              dobotColourSim.py
+#                                                     COMPATABILITY:                            100%
+#
+####################################################################################################################################################################################################
 import random
 
 # --- CONFIGURATION ---
@@ -48,7 +55,7 @@ def simulate_sensor_read():
     else:
         return 0 
 
-def get_color_and_slot(sensor_value):
+def get_colour_and_slot(sensor_value):
     global pink_index, green_index, black_index
     
     if not (sensor_value >= 0 and sensor_value <= 1050):
@@ -87,18 +94,18 @@ def run_simulation():
             
             # --- DROP LOGIC ---
             sensor = simulate_sensor_read()
-            color, target_slot, next_index = get_color_and_slot(sensor)
+            colour, target_slot, next_index = get_colour_and_slot(sensor)
             
-            if color == "PINK": 
+            if colour == "PINK": 
                 pink_index = next_index
                 total_blocks_processed += 1
-            elif color == "GREEN": 
+            elif colour == "GREEN": 
                 green_index = next_index
                 total_blocks_processed += 1
-            elif color == "BLACK": 
+            elif colour == "BLACK": 
                 black_index = next_index
                 total_blocks_processed += 1
-            elif color == "UNSORTED/GAP":
+            elif colour == "UNSORTED/GAP":
                 target_slot = "Error"
                 total_blocks_processed += 1
             else:
@@ -106,7 +113,7 @@ def run_simulation():
                 total_blocks_processed += 1
 
             
-            print(f"| {current_index+1:4} | {phase:5} | {sensor:6} | {color:5} | {target_slot:8} | {pink_index:9} | {green_index:10} | {black_index:9} |")
+            print(f"| {current_index+1:4} | {phase:5} | {sensor:6} | {colour:5} | {target_slot:8} | {pink_index:9} | {green_index:10} | {black_index:9} |")
             
         else:
             # --- RETRIEVAL LOGIC ---

@@ -1,5 +1,5 @@
 // MAIN.CPP FILE
-// VERSION: 1.3.0
+// VERSION: 1.5.1
 //
 // DOBOT BLOCK MOVEMENT AND COMMAND ASSIGNEMENT
 // CONTRIBUTERS - bg7890g@gre.ac.uk - rd8814j@gre.ac.uk - da1437y@gre.ac.uk
@@ -16,10 +16,20 @@
 //
 // V 1.3.1 - Replaced long delays with new waitCmd so they will execute efficiently rather than us telling it when to do so.
 //
+// V 1.3.2 - Adding already supplied light sensor code as we know it works via file lightSensor.cpp. This is produced by the university.
+//
+// V 1.4.0 - Added our own colour sensing based on the results we got back from our colour test. Uses light levels to determine what colour band it is in. The applied sensor is 8mm away.
+//
+// V 1.5.0 - Added the python script used to simulate block placement based on colour. The python coordinates simulator will be added in a later version.
+//
+// V 1.5.1 - Added the python coordinates verification tool, dobotCordSim.py checked the numbers match up with how the Dobot would see it.
+//
+// V 2.0.0 - Final Revised Version, added comments where necessary regarding the theory and why some parts werent tested in the real world.
+//
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                               
 //                                                      THIS IS A THEORETICAL VERSION: LAST WORKING VERSION
-//                                                      COLOUR SORTING:                     lightSensor.cpp
+//                                                      COLOUR SORTING:                           main7.cpp
 //                                                      DOBOT MOVEMENTS:                          main3.cpp
 //                                                      COMPATABILITY:                              UNKNOWN
 //
@@ -31,6 +41,11 @@ Dobot dobot = Dobot();
 
 const int NUM_DROP_POINTS = 9;
 int currentDropIndex = 0;
+
+// --- COLOUR SORTING INDEX ---
+uint8_t pinkIndex = 0;                                                                                                                       
+uint8_t greenIndex = 3;                                                                                                                      
+uint8_t blackIndex = 6;                                                                                                        
 
 // --- RAW COMMAND PACKETS ---
 byte suckOnCmd[] = {170, 170, 4, 62, 3, 1, 1, 189};
@@ -57,19 +72,28 @@ byte dropPos7Cmd[] = {170, 170, 19, 84, 3, 0, 252, 85, 91, 67, 218, 204, 198, 19
 byte dropPos8Cmd[] = {170, 170, 19, 84, 3, 0, 38, 155, 74, 67, 116, 226, 3, 195, 76, 136, 48, 194, 60, 63, 4, 194, 56};
 byte dropPos9Cmd[] = {170, 170, 19, 84, 3, 0, 65, 45, 60, 67, 220, 182, 199, 194, 122, 65, 46, 194, 153, 159, 223, 193, 30};
 
-// Array OF ALL 9 DROPS ---
+// --- ARRAY OF ALL 9 DROPS ---
 byte* dropPositions[] = {
     dropPos1Cmd, dropPos2Cmd, dropPos3Cmd, dropPos4Cmd, dropPos5Cmd,
     dropPos6Cmd, dropPos7Cmd, dropPos8Cmd, dropPos9Cmd
 };
- 
 
+// --- LIGHT SENSOR DECLARATION ---
+int readLightSensor() {
+    int sensorValue = analogRead(A0); 
+    Serial.print("Sensor Read: ");
+    Serial.println(sensorValue);
+    delay(10); 
+    return sensorValue;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// --- QUEUE SETUP (Clear, Start) ---
 void setup() {
   
   dobot.begin();
   Serial.begin(9600); // Arduino Baud Rate Is 9600
   
-  // --- QUEUE SETUP (Clear, Start) ---
   byte clearQueueCmd[] = {170, 170, 2, 245, 1, 0, 10};
   dobot.commandFrame(clearQueueCmd);
   delay(100);
@@ -79,56 +103,97 @@ void setup() {
   Serial.println("Ready. Entering Incremental Pick-Lift-Drop Loop.");
 }
 
-void loop()
-{
-    if (currentDropIndex >= NUM_DROP_POINTS) {
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void loop() {
+    if (currentDropIndex >= NUM_DROP_POINTS * 2) {
         currentDropIndex = 0;
-        Serial.println("--- Drop Sequence Reset ---");
+        pinkIndex = 0;   
+        greenIndex = 3;  
+        blackIndex = 6;
+        Serial.println("--- Full Cycle Complete ---");
+        delay(1000);
     }
-    Serial.print("--- Starting Pick and Drop to Position ");
-    Serial.print(currentDropIndex + 1);
-    Serial.println(" ---");
     
     if (currentDropIndex < NUM_DROP_POINTS) {
-        // --- PICK UP PHASE ---
-        dobot.commandFrame(pickupPosHoverCmd);
-        dobot.commandFrame(waitCmd);
-        delay(100);
         
-        dobot.commandFrame(pickupPosDownCmd);
+        // --- PICK UP ---
+        dobot.commandFrame(pickupPosHoverCmd); 
         dobot.commandFrame(waitCmd);
         delay(100);
-        
-        dobot.commandFrame(suckOnCmd);
-        Serial.println("Suction ON: Block collected.");
-        delay(500);
-        
-        dobot.commandFrame(pickupPosHoverCmd);
-        dobot.commandFrame(waitCmd);
-        delay(100);
-    
-        // --- DROP OFF PHASE ---
-        dobot.commandFrame(dropPositions[currentDropIndex]);
-        Serial.print("Moving to Drop Position ");
-        Serial.println(currentDropIndex + 1);
-        dobot.commandFrame(waitCmd);
-        delay(100);
-        
-        dobot.commandFrame(suckOffCmd);
-        Serial.println("Suction OFF: Block dropped.");
-        delay(500);
-    
-        dobot.commandFrame(pickupPosHoverCmd);
-        dobot.commandFrame(waitCmd);
-        delay(100);
-    
-        currentDropIndex++;
 
-        Serial.println("--- Cycle Complete. ---");
-        delay(3000);
+        dobot.commandFrame(pickupPosDownCmd); 
+        dobot.commandFrame(waitCmd); 
+        delay(100); 
+
+        int sensorValue = readLightSensor();
+
+        dobot.commandFrame(suckOnCmd); 
+        delay(500); 
+        
+        dobot.commandFrame(pickupPosHoverCmd);
+        dobot.commandFrame(waitCmd);
+        delay(100);
+        
+        byte* targetDropCmd;
+        int targetSlot;
+        
+        // --- COLOUR CASES ---
+        // --- PINK ---
+        if (sensorValue >= 0 && sensorValue <= 325) {
+            targetSlot = pinkIndex;
+            Serial.println("-> Detected: PINK");
+            pinkIndex = (pinkIndex >= 2) ? 0 : pinkIndex + 1;
+        }
+        
+        // --- GREEN ---
+        else if (sensorValue >= 350 && sensorValue <= 675) {
+            targetSlot = greenIndex;
+            Serial.println("-> Detected: GREEN");
+            greenIndex = (greenIndex >= 5) ? 3 : greenIndex + 1;
+        }
+        
+        // --- BLACK ---
+        else if (sensorValue >= 700 && sensorValue <= 1050) {
+            targetSlot = blackIndex;
+            Serial.println("-> Detected: BLACK");
+            blackIndex = (blackIndex >= 8) ? 6 : blackIndex + 1;
+        }
+        
+        // --- UNKNOWN COLOUR ---
+        else {
+            targetDropCmd = pickupPosHoverCmd; 
+            targetSlot = -1;
+            Serial.println("-> Detected: OUT OF RANGE. Dropping.");
+        }
+        
+        if (targetSlot != -1) {
+            targetDropCmd = dropPositions[targetSlot];
+        }
+
+        dobot.commandFrame(targetDropCmd); 
+        dobot.commandFrame(waitCmd); 
+        delay(100); 
+        
+    
+        dobot.commandFrame(suckOffCmd); 
+        Serial.print("DROPPING: Dropped at position");
+        if (targetSlot != -1) {
+            Serial.println(targetSlot + 1);
+        } 
+        
+        else {
+            Serial.println("Hover Position.");
+        }
+       
+        delay(500); 
+    
+        dobot.commandFrame(pickupPosHoverCmd);
+        dobot.commandFrame(waitCmd);
+        delay(100); 
     }
 
     else {
+
 
         // --- RETRIEVAL ---
         const int retrievalIndex = NUM_DROP_POINTS * 2 - 1 - currentDropIndex;
@@ -166,3 +231,4 @@ void loop()
     }
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

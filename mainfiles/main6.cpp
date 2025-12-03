@@ -23,7 +23,15 @@
 // V 1.5.0 - Added the python script used to simulate block placement based on colour. The python coordinates simulator will be added in a later version.
 //
 // V 1.5.1 - Added the python coordinates verification tool, dobotCordSim.py checked the numbers match up with how the Dobot would see it.
-
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                               
+//                                                      THIS IS A THEORETICAL VERSION: LAST WORKING VERSION
+//                                                      COLOUR SORTING:                           main6.cpp
+//                                                      DOBOT MOVEMENTS:                          main3.cpp
+//                                                      COMPATABILITY:                              UNKNOWN
+//
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <Arduino.h>
 #include <Dobot.h>
 

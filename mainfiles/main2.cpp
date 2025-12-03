@@ -8,7 +8,15 @@
 //
 // V 1.1.0 - Now added the locations declaring them as bytes so we can send the functions back to the robot in a write state instead of a read state. The loop is
 //           a simple verification tool just telling the Dobot where to go.
-
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                               
+//                                                      THIS IS A COMPLETE WORKING VERSION OF THE CODE
+//                                                      COLOUR SORTING:                lightSensor.cpp
+//                                                      DOBOT MOVEMENTS:                     main2.cpp
+//                                                      COMPATABILITY:                            100%
+//
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <Arduino.h>
 #include <Dobot.h>
 

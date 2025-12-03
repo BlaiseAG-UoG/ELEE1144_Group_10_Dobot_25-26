@@ -5,7 +5,15 @@
 // CONTRIBUTERS - bg7890g@gre.ac.uk - rd8814j@gre.ac.uk - da1437y@gre.ac.uk
 //
 // V 1.0.0 - Simple script to grab the positions for our preferred placements, uses getPoseCmd to send coordinates and then we will use those to send back.
-
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                               
+//                                                      THIS IS A COMPLETE WORKING VERSION OF THE CODE
+//                                                      COLOUR SORTING:                lightSensor.cpp
+//                                                      DOBOT MOVEMENTS:                      main.cpp   
+//                                                      COMPATABILITY:                            100%
+//
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <Arduino.h>
 #include <Dobot.h>
 
