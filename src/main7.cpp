@@ -1,5 +1,5 @@
 // MAIN.CPP FILE
-// VERSION: 1.5.1
+// VERSION: 2.0.0
 //
 // DOBOT BLOCK MOVEMENT AND COMMAND ASSIGNEMENT
 // CONTRIBUTERS - bg7890g@gre.ac.uk - rd8814j@gre.ac.uk - da1437y@gre.ac.uk
